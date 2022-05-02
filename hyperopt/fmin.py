@@ -157,13 +157,13 @@ class FMinIter:
         self.rstate = rstate
         self.verbose = verbose
 
-        # if self.asynchronous:
-        #     if "FMinIter_Domain" in trials.attachments:
-        #         logger.warning("over-writing old domain trials attachment")
-        #     msg = pickler.dumps(domain)
-        #     # -- sanity check for unpickling
-        #     pickler.loads(msg)
-        #     trials.attachments["FMinIter_Domain"] = msg
+        if self.asynchronous and not self.trials._spark:
+            if "FMinIter_Domain" in trials.attachments:
+                logger.warning("over-writing old domain trials attachment")
+            msg = pickler.dumps(domain)
+            # -- sanity check for unpickling
+            pickler.loads(msg)
+            trials.attachments["FMinIter_Domain"] = msg
 
     def serial_evaluate(self, N=-1):
         for trial in self.trials._dynamic_trials:
